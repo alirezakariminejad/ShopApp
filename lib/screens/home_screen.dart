@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_application/constants/constants.dart';
+import 'package:flutter_shop_application/data/repository/banner_repository.dart';
 import 'package:flutter_shop_application/widgets/banner_slider.dart';
 import 'package:flutter_shop_application/widgets/horizontal_category_list.dart';
 import 'package:flutter_shop_application/widgets/product_item.dart';
@@ -19,6 +20,25 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: ElevatedButton(
+                  onPressed: () async {
+                    var response = await BannerRepository().getBanners();
+                    response.fold(
+                      (l) {
+                        print(l);
+                      },
+                      (r) {
+                        r.forEach(
+                          (element) {
+                            print(element.id);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Text('load bannwe')),
+            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -105,8 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Padding(
-                    padding:
-                        EdgeInsets.only(top: 32.0, right: 44.0, left: 44.0),
+                    padding: EdgeInsets.only(top: 32.0, right: 44.0, left: 44.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -131,8 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4.0),
                             Image(
-                              image: AssetImage(
-                                  'assets/images/arrow_left_blue.png'),
+                              image: AssetImage('assets/images/arrow_left_blue.png'),
                             ),
                           ],
                         ),
@@ -188,8 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4.0),
                             Image(
-                              image: AssetImage(
-                                  'assets/images/arrow_left_blue.png'),
+                              image: AssetImage('assets/images/arrow_left_blue.png'),
                             ),
                           ],
                         ),
