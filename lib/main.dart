@@ -44,10 +44,11 @@ class _ShopAppState extends State<ShopApp> {
           //   create: (context) => AuthBloc(),
           //   child: CategoryScreen(),
           // ),
-          body: BlocProvider(
-            create: (context) => CategoryBloc(),
-            child: CategoryScreen(),
-          ),
+          // body: BlocProvider(
+          //   create: (context) => CategoryBloc(),
+          //   child: CategoryScreen(),
+          // ),
+          body: HomeScreen(),
         ),
       ),
     );
