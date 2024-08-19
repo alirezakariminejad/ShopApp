@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_application/bloc/authentication/auth_bloc.dart';
 import 'package:flutter_shop_application/bloc/category/category_bloc.dart';
+import 'package:flutter_shop_application/bloc/home/home_bloc.dart';
 import 'package:flutter_shop_application/constants/constants.dart';
 import 'package:flutter_shop_application/data/data_source/authentication_data_source.dart';
 import 'package:flutter_shop_application/data/repository/authentication_repository.dart';
@@ -48,7 +49,11 @@ class _ShopAppState extends State<ShopApp> {
           //   create: (context) => CategoryBloc(),
           //   child: CategoryScreen(),
           // ),
-          body: HomeScreen(),
+          // body: HomeScreen(),
+          body: BlocProvider(
+            create: (context) => HomeBloc(),
+            child: HomeScreen(),
+          ),
         ),
       ),
     );
