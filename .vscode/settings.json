@@ -4,5 +4,8 @@
         "editor.rulers": [
             100
         ],
-    }
+    },
+    "editor.fontSize": 20,
+    "editor.accessibilityPageSize": 10,
+    "editor.inlayHints.fontSize": 0
 }
