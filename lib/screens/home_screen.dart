@@ -8,6 +8,8 @@ import 'package:flutter_shop_application/data/repository/banner_repository.dart'
 import 'package:flutter_shop_application/widgets/banner_slider.dart';
 import 'package:flutter_shop_application/widgets/horizontal_category_list.dart';
 import 'package:flutter_shop_application/widgets/product_item.dart';
+import 'package:flutter_shop_application/model/banner_model.dart';
+import 'package:flutter_shop_application/model/category.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,8 +35,35 @@ class _HomeScreenState extends State<HomeScreen> {
             return CustomScrollView(
               slivers: <Widget>[
                 _searchWidget(),
-                _bannerSliderWidget(),
-                _categoriesWidget(),
+                if (state is HomeLoadingState) ...[
+                  SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                ],
+                if (state is HomeRequestSuccessState) ...[
+                  state.bannerList.fold(
+                    (l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    },
+                    (r) {
+                      return _bannerSliderWidget(r);
+                    },
+                  )
+                ],
+                if (state is HomeRequestSuccessState) ...[
+                  state.categoryList.fold(
+                    (l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    },
+                    (r) {
+                      return _categoriesWidget(r);
+                    },
+                  )
+                ],
                 _bestSellersWidget(),
                 _mostVisitedWidget(),
               ],
@@ -47,14 +76,16 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _bannerSliderWidget extends StatelessWidget {
-  const _bannerSliderWidget({
+  List<BannerModel> bannrList;
+  _bannerSliderWidget(
+    this.bannrList, {
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: BannerSlider(),
+      child: BannerSlider(bannrList),
     );
   }
 }
@@ -192,7 +223,9 @@ class _bestSellersWidget extends StatelessWidget {
 }
 
 class _categoriesWidget extends StatelessWidget {
-  const _categoriesWidget({
+  List<Category> categories;
+   _categoriesWidget(
+    this.categories, {
     super.key,
   });
 
@@ -218,14 +251,14 @@ class _categoriesWidget extends StatelessWidget {
           ),
           const SizedBox(height: 20.0),
           SizedBox(
-            height: 85.0,
+            height: 90.0,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              itemCount: 10,
+              itemCount: categories.length,
               padding: const EdgeInsetsDirectional.only(start: 44.0),
               itemBuilder: (BuildContext context, int index) {
-                return HorizontalCategoryList();
+                return HorizontalCategoryList(categories[index]);
               },
             ),
           ),
