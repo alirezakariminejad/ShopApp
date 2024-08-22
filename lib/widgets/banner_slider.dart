@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_application/constants/constants.dart';
+import 'package:flutter_shop_application/widgets/cached_image.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_shop_application/model/banner_model.dart';
 
 class BannerSlider extends StatelessWidget {
-  const BannerSlider({super.key});
+  List<BannerModel> bannerList;
+  BannerSlider(this.bannerList, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +19,12 @@ class BannerSlider extends StatelessWidget {
           height: 175.0,
           child: PageView.builder(
             controller: controller,
-            itemCount: 5,
+            itemCount: bannerList.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Container(
-                  color: shopGreen,
+                child: CachedImage(
+                  imageUrl: bannerList[index].thumbnail,
                 ),
               );
             },
