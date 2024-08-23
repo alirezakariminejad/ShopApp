@@ -5,6 +5,7 @@ import 'package:flutter_shop_application/bloc/home/home_event.dart';
 import 'package:flutter_shop_application/bloc/home/home_state.dart';
 import 'package:flutter_shop_application/constants/constants.dart';
 import 'package:flutter_shop_application/data/repository/banner_repository.dart';
+import 'package:flutter_shop_application/model/product.dart';
 import 'package:flutter_shop_application/widgets/banner_slider.dart';
 import 'package:flutter_shop_application/widgets/horizontal_category_list.dart';
 import 'package:flutter_shop_application/widgets/product_item.dart';
@@ -64,8 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   )
                 ],
-                _bestSellersWidget(),
-                _mostVisitedWidget(),
+                if (state is HomeRequestSuccessState) ...[
+                  state.productList.fold(
+                    (l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    },
+                    (r) {
+                      return _bestSellersWidget(r);
+                    },
+                  )
+                ],
+                // _mostVisitedWidget(),
               ],
             );
           },
@@ -91,7 +103,9 @@ class _bannerSliderWidget extends StatelessWidget {
 }
 
 class _mostVisitedWidget extends StatelessWidget {
-  const _mostVisitedWidget({
+  List<Product> products;
+  _mostVisitedWidget(
+    this.products, {
     super.key,
   });
 
@@ -141,12 +155,12 @@ class _mostVisitedWidget extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              itemCount: 10,
+              itemCount: products.length,
               padding: const EdgeInsetsDirectional.only(
                 start: 44.0,
               ),
               itemBuilder: (BuildContext context, int index) {
-                return ProductItem();
+                return ProductItem(products[index]);
               },
             ),
           ),
@@ -157,7 +171,9 @@ class _mostVisitedWidget extends StatelessWidget {
 }
 
 class _bestSellersWidget extends StatelessWidget {
-  const _bestSellersWidget({
+  List<Product> products;
+  _bestSellersWidget(
+    this.products, {
     super.key,
   });
 
@@ -207,12 +223,12 @@ class _bestSellersWidget extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              itemCount: 10,
+              itemCount: products.length,
               padding: const EdgeInsetsDirectional.only(
                 start: 44.0,
               ),
               itemBuilder: (BuildContext context, int index) {
-                return ProductItem();
+                return ProductItem(products[index]);
               },
             ),
           ),
@@ -224,7 +240,7 @@ class _bestSellersWidget extends StatelessWidget {
 
 class _categoriesWidget extends StatelessWidget {
   List<Category> categories;
-   _categoriesWidget(
+  _categoriesWidget(
     this.categories, {
     super.key,
   });
