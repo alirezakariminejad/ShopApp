@@ -9,8 +9,10 @@ class Product {
   String? description;
   int? price;
   int? discountPrice;
+  int? priceWithDiscount;
   String? popularity;
   int? quantity;
+  num? percent;
 
   Product(
     this.id,
@@ -23,7 +25,10 @@ class Product {
     this.discountPrice,
     this.popularity,
     this.quantity,
-  );
+  ) {
+    priceWithDiscount = (price ?? 0) - (discountPrice ?? 0);
+    percent = (((price!) - (priceWithDiscount!)) / (price!)) * 100;
+  }
 
   factory Product.fromMapJson(Map<String, dynamic> jsonObject) {
     return Product(
@@ -34,7 +39,7 @@ class Product {
       '${baseUrl}files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}',
       jsonObject["description"],
       jsonObject["price"],
-      jsonObject["discountPrice"],
+      jsonObject["discount_price"],
       jsonObject["popularity"],
       jsonObject["quantity"],
     );
