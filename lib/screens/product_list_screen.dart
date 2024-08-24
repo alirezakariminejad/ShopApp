@@ -68,7 +68,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     crossAxisSpacing: 20,
                     childAspectRatio: 8 / 11),
                 itemBuilder: (context, index) {
-                  return ProductItem(leftPadding: 0);
+                  // return ProductItem(leftPadding: 0);
                 },
               ),
             )
