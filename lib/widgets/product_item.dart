@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_shop_application/constants/constants.dart';
+import 'package:flutter_shop_application/model/product.dart';
+import 'package:flutter_shop_application/widgets/cached_image.dart';
 
 class ProductItem extends StatelessWidget {
   final double? leftPadding;
-  const ProductItem({super.key, this.leftPadding = 20.0});
+  Product product;
+  ProductItem(this.product, {super.key, this.leftPadding = 20.0});
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +45,9 @@ class ProductItem extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          child: Image.asset(
-                            'assets/images/iphone13.png',
-                            height: 100.0,
+                          child: CachedImage(
+                            imageUrl: product.thumbnail,
+                            imageHeight: 100.0,
                           ),
                         ),
                         Positioned(
@@ -52,13 +55,11 @@ class ProductItem extends StatelessWidget {
                           left: 0,
                           child: Container(
                             decoration: BoxDecoration(
-                                color: shopRed,
-                                borderRadius: BorderRadius.circular(100.0)),
+                                color: shopRed, borderRadius: BorderRadius.circular(100.0)),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5.0, vertical: 2.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                               child: Text(
-                                '%۳',
+                                '%${product.percent!.round().toString()}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12.0,
@@ -74,7 +75,7 @@ class ProductItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
-                    'اپل واچ سری ۷',
+                    '${product.name}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14.0,
@@ -85,7 +86,7 @@ class ProductItem extends StatelessWidget {
             ),
           ),
           Container(
-            height: 55.0,
+            height: 60.0,
             width: 160,
             padding: EdgeInsets.symmetric(
               horizontal: 10.0,
@@ -120,14 +121,14 @@ class ProductItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '۴۶٬۰۰۰٬۰۰۰',
+                          '${product.price}',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 14.0,
                               decoration: TextDecoration.lineThrough),
                         ),
                         Text(
-                          '۴۵٬۳۵۰٬۰۰۰',
+                          '${product.priceWithDiscount}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.0,
