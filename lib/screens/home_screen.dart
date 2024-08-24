@@ -77,7 +77,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   )
                 ],
-                // _mostVisitedWidget(),
+                if (state is HomeRquestHottestProductState) ...[
+                  state.hottestProductList.fold(
+                    (l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    },
+                    (r) {
+                      return _mostVisitedWidget(r);
+                    },
+                  )
+                ],
               ],
             );
           },
