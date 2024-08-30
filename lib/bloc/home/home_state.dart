@@ -13,15 +13,13 @@ class HomeRequestSuccessState extends HomeState {
   Either<String, List<BannerModel>> bannerList;
   Either<String, List<Category>> categoryList;
   Either<String, List<Product>> productList;
-  HomeRequestSuccessState(this.bannerList, this.categoryList, this.productList);
-}
-
-class HomeRquestBestSellerProductState extends HomeState {
   Either<String, List<Product>> bestSellerProductList;
-  HomeRquestBestSellerProductState(this.bestSellerProductList);
-}
-
-class HomeRquestHottestProductState extends HomeState {
-    Either<String, List<Product>> hottestProductList;
-  HomeRquestHottestProductState(this.hottestProductList);
+  Either<String, List<Product>> hottestProductList;
+  HomeRequestSuccessState(
+    this.bannerList,
+    this.categoryList,
+    this.productList,
+    this.bestSellerProductList,
+    this.hottestProductList,
+  );
 }
