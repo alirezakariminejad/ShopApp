@@ -36,59 +36,60 @@ class _HomeScreenState extends State<HomeScreen> {
             return CustomScrollView(
               slivers: <Widget>[
                 _searchWidget(),
-                if (state is HomeLoadingState) ...[
+                if (state is HomeLoadingState) ...{
                   SliverToBoxAdapter(
                     child: Center(child: CircularProgressIndicator()),
                   )
-                ],
-                if (state is HomeRequestSuccessState) ...[
-                  state.bannerList.fold(
-                    (l) {
-                      return SliverToBoxAdapter(
-                        child: Text(l),
-                      );
-                    },
-                    (r) {
-                      return _bannerSliderWidget(r);
-                    },
-                  )
-                ],
-                if (state is HomeRequestSuccessState) ...[
-                  state.categoryList.fold(
-                    (l) {
-                      return SliverToBoxAdapter(
-                        child: Text(l),
-                      );
-                    },
-                    (r) {
-                      return _categoriesWidget(r);
-                    },
-                  )
-                ],
-                if (state is HomeRequestSuccessState) ...[
-                  state.productList.fold(
-                    (l) {
-                      return SliverToBoxAdapter(
-                        child: Text(l),
-                      );
-                    },
-                    (r) {
-                      return _bestSellersWidget(r);
-                    },
-                  )
-                ],
-                if (state is HomeRquestHottestProductState) ...[
-                  state.hottestProductList.fold(
-                    (l) {
-                      return SliverToBoxAdapter(
-                        child: Text(l),
-                      );
-                    },
-                    (r) {
-                      return _mostVisitedWidget(r);
-                    },
-                  )
-                ],
+                } else ...{
+                  if (state is HomeRequestSuccessState) ...[
+                    state.bannerList.fold(
+                      (l) {
+                        return SliverToBoxAdapter(
+                          child: Text(l),
+                        );
+                      },
+                      (r) {
+                        return _bannerSliderWidget(r);
+                      },
+                    )
+                  ],
+                  if (state is HomeRequestSuccessState) ...[
+                    state.categoryList.fold(
+                      (l) {
+                        return SliverToBoxAdapter(
+                          child: Text(l),
+                        );
+                      },
+                      (r) {
+                        return _categoriesWidget(r);
+                      },
+                    )
+                  ],
+                  if (state is HomeRequestSuccessState) ...[
+                    state.bestSellerProductList.fold(
+                      (l) {
+                        return SliverToBoxAdapter(
+                          child: Text(l),
+                        );
+                      },
+                      (r) {
+                        return _bestSellersWidget(r);
+                      },
+                    )
+                  ],
+                  if (state is HomeRequestSuccessState) ...[
+                    state.hottestProductList.fold(
+                      (l) {
+                        return SliverToBoxAdapter(
+                          child: Text(l),
+                        );
+                      },
+                      (r) {
+                        return _mostVisitedWidget(r);
+                      },
+                    )
+                  ],
+                }
               ],
             );
           },
