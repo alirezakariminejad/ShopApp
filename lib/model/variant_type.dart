@@ -1,8 +1,14 @@
+enum VariantTypeEnum {
+  color,
+  storage,
+  voltage,
+}
+
 class VariantType {
   String? id;
   String? name;
   String? title;
-  String? type;
+  VariantTypeEnum? type;
 
   VariantType(this.id, this.name, this.title, this.type);
 
@@ -11,7 +17,20 @@ class VariantType {
       jsonObject["id"],
       jsonObject["name"],
       jsonObject["title"],
-      jsonObject["type"],
+      _getVariantTypeEnum(jsonObject["type"]),
     );
+  }
+}
+
+VariantTypeEnum _getVariantTypeEnum(String type) {
+  switch (type) {
+    case "Color":
+      return VariantTypeEnum.color;
+    case "Storage":
+      return VariantTypeEnum.storage;
+    case "Voltage":
+      return VariantTypeEnum.voltage;
+    default:
+      return VariantTypeEnum.color;
   }
 }
