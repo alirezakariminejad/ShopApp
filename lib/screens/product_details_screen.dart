@@ -9,6 +9,7 @@ import 'package:flutter_shop_application/model/product_images.dart';
 import 'package:flutter_shop_application/constants/constants.dart';
 import 'package:flutter_shop_application/data/repository/product_details_repository.dart';
 import 'package:flutter_shop_application/di/di.dart';
+import 'package:flutter_shop_application/model/variant_type.dart';
 import 'package:flutter_shop_application/widgets/cached_image.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -97,7 +98,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ),
                     if (state is ProductDetailsResponseState) ...{
-                      state.getProductImages.fold(
+                      state.productImages.fold(
                         (l) {
                           return SliverToBoxAdapter(child: Text(l));
                         },
@@ -106,94 +107,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         },
                       )
                     },
-                    SliverPadding(
-                      padding: const EdgeInsets.only(left: 64.0, right: 64.0, bottom: 16.0),
-                      sliver: SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'انتخاب رنگ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16.0,
-                              ),
-                            ),
-                            SizedBox(height: 10.0),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 10.0),
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(0, 0, 0, 0.07),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 32.0,
-                                        height: 32.0,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 10.0,
-                                          right: 10.0,
-                                        ),
-                                        child: Text(
-                                          'مشکی',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 32.0,
-                                      height: 32.0,
-                                      margin: EdgeInsets.only(left: 10.0),
-                                      decoration: BoxDecoration(
-                                        color: shopRed,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(8.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 32.0,
-                                      height: 32.0,
-                                      margin: EdgeInsets.only(left: 10.0),
-                                      decoration: BoxDecoration(
-                                        color: shopGreen,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(8.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    if (state is ProductDetailsResponseState) ...{
+                      state.productVariantTypes.fold(
+                        (l) {
+                          return SliverToBoxAdapter(child: Text(l));
+                        },
+                        (r) {
+                          return ProductColorVariant(r);
+                        },
+                      )
+                    },
                     SliverPadding(
                       padding: const EdgeInsets.only(left: 64.0, right: 64.0, bottom: 16.0),
                       sliver: SliverToBoxAdapter(
@@ -596,6 +519,105 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class ProductColorVariant extends StatelessWidget {
+  VariantType variantType;
+  ProductColorVariant(this.variantType,{
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.only(left: 64.0, right: 64.0, bottom: 16.0),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${variantType.title}',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 10.0),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(0, 0, 0, 0.07),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 32.0,
+                        height: 32.0,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10.0,
+                          right: 10.0,
+                        ),
+                        child: Text(
+                          'مشکی',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 32.0,
+                      height: 32.0,
+                      margin: EdgeInsets.only(left: 10.0),
+                      decoration: BoxDecoration(
+                        color: shopRed,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 32.0,
+                      height: 32.0,
+                      margin: EdgeInsets.only(left: 10.0),
+                      decoration: BoxDecoration(
+                        color: shopGreen,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
