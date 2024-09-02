@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_shop_application/bloc/product/product_bloc.dart';
 
 import 'package:flutter_shop_application/constants/constants.dart';
 import 'package:flutter_shop_application/model/product.dart';
@@ -16,7 +18,10 @@ class ProductItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ProductDetailsScreen(),
+            builder: (context) => BlocProvider(
+              create: (context) => ProductBloc(),
+              child: ProductDetailsScreen(),
+            ),
           ),
         );
       },
