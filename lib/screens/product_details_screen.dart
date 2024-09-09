@@ -543,7 +543,9 @@ class VariantContainerGenerator extends StatelessWidget {
         child: Column(
           children: [
             for (var productVariant in productVariantsList) ...{
-              if (productVariant.variantsList.isNotEmpty) ...{VariantContainerChild(productVariant)}
+              if (productVariant.variantsList.isNotEmpty) ...{
+                VariantContainerChild(productVariant),
+              }
             }
           ],
         ),
@@ -572,7 +574,6 @@ class VariantContainerChild extends StatelessWidget {
         if (productVariantList.variantType.type == VariantTypeEnum.color) ...{
           ColorVariantList(productVariantList.variantsList)
         },
-        
         if (productVariantList.variantType.type == VariantTypeEnum.storage) ...{
           StorageVariantList(productVariantList.variantsList)
         },
