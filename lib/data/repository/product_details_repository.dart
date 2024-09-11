@@ -7,7 +7,7 @@ import 'package:flutter_shop_application/model/variant_type.dart';
 import 'package:flutter_shop_application/utils/api_exception.dart';
 
 abstract class IProductDetailsRepository {
-  Future<Either<String, List<ProductImages>>> getProductImagesRepository();
+  Future<Either<String, List<ProductImages>>> getProductImagesRepository(String productId);
   Future<Either<String, List<VariantType>>> getVariantTypeRepository();
   Future<Either<String, List<ProductVariant>>> getProductVariantsRepository();
 }
@@ -16,9 +16,9 @@ class ProductDetailsRepository extends IProductDetailsRepository {
   final IProductDetailsDataSource _productDetailsDataSource = locator.get();
 
   @override
-  Future<Either<String, List<ProductImages>>> getProductImagesRepository() async {
+  Future<Either<String, List<ProductImages>>> getProductImagesRepository(String productId) async {
     try {
-      var response = await _productDetailsDataSource.getGallery();
+      var response = await _productDetailsDataSource.getGallery(productId);
       return right(response);
     } on ApiException catch (ex) {
       return left(ex.message ?? 'خطا محتوای متنی ندارد');
