@@ -719,41 +719,61 @@ class ColorVariantList extends StatefulWidget {
 }
 
 class _ColorVariantListState extends State<ColorVariantList> {
-  List<Widget> colorWidgets = [];
-  @override
-  void initState() {
-    for (var variant in widget.variantList) {
-      String categoryColor = 'FF${variant.value}';
-      int hexColor = int.parse(categoryColor, radix: 16);
-      var option = Row(
-        children: [
-          Container(
-            width: 32.0,
-            height: 32.0,
-            margin: EdgeInsets.only(left: 10.0),
-            decoration: BoxDecoration(
-              color: Color(hexColor),
-              borderRadius: BorderRadius.all(
-                Radius.circular(8.0),
-              ),
-            ),
-          ),
-        ],
-      );
-      colorWidgets.add(option);
-    }
-    super.initState();
-  }
-
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 32.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: colorWidgets.length,
+        itemCount: widget.variantList.length,
         itemBuilder: (BuildContext context, int index) {
-          return colorWidgets[index];
+          String categoryColor = 'FF${widget.variantList[index].value}';
+          int hexColor = int.parse(categoryColor, radix: 16);
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            child: Container(
+              width: 32.0,
+              height: 32.0,
+              margin: EdgeInsets.only(left: 10.0),
+              decoration: BoxDecoration(
+                color: Color(hexColor),
+                border: (_selectedIndex == index)
+                    ? Border.all(
+                        color: Colors.white,
+                        width: 3.0,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      )
+                    : Border.all(
+                        color: Colors.white,
+                        width: 0.0,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
+                boxShadow: [
+                  (_selectedIndex == index)
+                      ? const BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.5),
+                          blurRadius: 10.0,
+                          spreadRadius: -3.0,
+                          offset: Offset(0, 10.0),
+                        )
+                      : BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.0),
+                          blurRadius: 10.0,
+                          spreadRadius: 0.0,
+                          offset: Offset(0, 5.0),
+                        )
+                ],
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
@@ -769,47 +789,70 @@ class StorageVariantList extends StatefulWidget {
 }
 
 class _StorageVariantListState extends State<StorageVariantList> {
-  List<Widget> storageWidget = [];
-
-  @override
-  void initState() {
-    for (var variant in widget.strorageVariants) {
-      var option = Container(
-        margin: EdgeInsets.only(left: 10.0),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(0, 0, 0, 0.07),
-          borderRadius: BorderRadius.all(
-            Radius.circular(8.0),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8.0,
-            horizontal: 24.0,
-          ),
-          child: Text(
-            '${variant.value}',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16.0,
-            ),
-          ),
-        ),
-      );
-      storageWidget.add(option);
-    }
-    super.initState();
-  }
-
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 39.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: storageWidget.length,
+        itemCount: widget.strorageVariants.length,
         itemBuilder: (BuildContext context, int index) {
-          return storageWidget[index];
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 10.0),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(220, 220, 220, 1),
+                border: (_selectedIndex == index)
+                    ? Border.all(
+                        color: Colors.white,
+                        width: 3.0,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      )
+                    : Border.all(
+                        color: Colors.white,
+                        width: 0.0,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
+                boxShadow: [
+                  (_selectedIndex == index)
+                      ? const BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.3),
+                          blurRadius: 10.0,
+                          spreadRadius: -3.0,
+                          offset: Offset(0, 7.0),
+                        )
+                      : BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.0),
+                          blurRadius: 10.0,
+                          spreadRadius: 0.0,
+                          offset: Offset(0, 5.0),
+                        )
+                ],
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 24.0,
+                ),
+                child: Text(
+                  '${widget.strorageVariants[index].value}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
