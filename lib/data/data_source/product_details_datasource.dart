@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_shop_application/di/di.dart';
+import 'package:flutter_shop_application/model/category.dart';
 import 'package:flutter_shop_application/model/product_images.dart';
 import 'package:flutter_shop_application/model/product_variant.dart';
 import 'package:flutter_shop_application/model/variant.dart';
@@ -11,6 +12,7 @@ abstract class IProductDetailsDataSource {
   Future<List<VariantType>> getVariantTypes();
   Future<List<Variant>> getVariants();
   Future<List<ProductVariant>> getProductVariants();
+  Future<Category> getProductCategory(String categoryId);
 }
 
 class ProductDetailsRemoteDatasource extends IProductDetailsDataSource {
@@ -79,5 +81,22 @@ class ProductDetailsRemoteDatasource extends IProductDetailsDataSource {
       productVariantList.add(ProductVariant(variantType, variantListArranged));
     }
     return productVariantList;
-  } 
+    
+  }
+
+  @override
+  Future<Category> getProductCategory(String categoryId) async {
+    try {
+      Map<String, String> qParams = {'filter': 'id="$categoryId"'};
+      var response = await _dio.get(
+        'collections/category/records',
+        queryParameters: qParams,
+      );
+      return Category.fromMapJson(response.data['items'][0]);
+    } on DioError catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'unknown error');
+    }
+  }
 }
