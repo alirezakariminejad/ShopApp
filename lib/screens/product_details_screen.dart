@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_application/bloc/product/product_bloc.dart';
 import 'package:flutter_shop_application/bloc/product/product_event.dart';
 import 'package:flutter_shop_application/bloc/product/product_state.dart';
+import 'package:flutter_shop_application/model/product.dart';
 import 'package:flutter_shop_application/model/product_images.dart';
 import 'package:flutter_shop_application/constants/constants.dart';
 import 'package:flutter_shop_application/data/repository/product_details_repository.dart';
@@ -16,7 +18,8 @@ import 'package:flutter_shop_application/model/variant.dart';
 import 'package:flutter_shop_application/widgets/cached_image.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  Product product;
+  ProductDetailsScreen(this.product, {super.key});
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -25,7 +28,7 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context).add(ProductInitalizeEvent());
+    BlocProvider.of<ProductBloc>(context).add(ProductInitalizeEvent(widget.product.id!));
     super.initState();
   }
 
@@ -82,7 +85,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                     ),
-                    const SliverToBoxAdapter(
+                    SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.only(
                           left: 44.0,
@@ -90,7 +93,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           bottom: 15.0,
                         ),
                         child: Text(
-                          'آیفون SE 2022',
+                          '${widget.product.name}',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -106,7 +109,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           return SliverToBoxAdapter(child: Text(l));
                         },
                         (r) {
-                          return GalleryWidget(r);
+                          return GalleryWidget(r, widget.product.thumbnail);
                         },
                       )
                     },
@@ -396,7 +399,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   child: GestureDetector(
                                     onTap: () async {
                                       IProductDetailsRepository repository = locator.get();
-                                      var response = await repository.getProductImagesRepository();
+                                      var response = await repository
+                                          .getProductImagesRepository(widget.product.id!);
                                       response.fold((l) {}, (r) {
                                         r.forEach((element) {
                                           print(element.image);
@@ -585,9 +589,11 @@ class VariantContainerChild extends StatelessWidget {
 
 class GalleryWidget extends StatefulWidget {
   List<ProductImages> images;
+  String? defaultProductThumbnail;
   int selectedIndex = 0;
   GalleryWidget(
-    this.images, {
+    this.images,
+    this.defaultProductThumbnail, {
     super.key,
   });
 
@@ -650,55 +656,61 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                   children: [
                     SizedBox(
                       height: 140.0,
+                      width: double.infinity,
                       child: CachedImage(
-                        imageUrl: widget.images[widget.selectedIndex].image,
+                        // widget.images[widget.selectedIndex].image
+                        imageUrl: (widget.images.isEmpty
+                            ? widget.defaultProductThumbnail
+                            : widget.images[widget.selectedIndex].image),
                         fit: BoxFit.contain,
                         radius: 10.0,
                       ),
                     ),
-                    SizedBox(height: 16.0),
-                    SizedBox(
-                      height: 70.0,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.images.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                widget.selectedIndex = index;
-                              });
-                            },
-                            child: Container(
-                              width: 70.0,
-                              height: 70.0,
-                              margin: EdgeInsets.only(left: 16.0),
-                              padding: EdgeInsets.all(5.0),
-                              decoration: BoxDecoration(
-                                color: Color.fromRGBO(0, 0, 0, 0.02),
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(
-                                  color: Color.fromRGBO(0, 0, 0, 0.3),
+                    if (widget.images.isNotEmpty) ...{
+                      const SizedBox(height: 16.0),
+                      SizedBox(
+                        height: 70.0,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.images.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  widget.selectedIndex = index;
+                                });
+                              },
+                              child: Container(
+                                width: 70.0,
+                                height: 70.0,
+                                margin: EdgeInsets.only(left: 16.0),
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(0, 0, 0, 0.02),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Color.fromRGBO(0, 0, 0, 0.3),
+                                  ),
+                                  boxShadow: [
+                                    const BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                                      blurRadius: 15.0,
+                                      spreadRadius: -5.0,
+                                      offset: Offset(0, 15.0),
+                                    )
+                                  ],
                                 ),
-                                boxShadow: [
-                                  const BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.15),
-                                    blurRadius: 15.0,
-                                    spreadRadius: -5.0,
-                                    offset: Offset(0, 15.0),
-                                  )
-                                ],
+                                child: CachedImage(
+                                  imageUrl: widget.images[index].image,
+                                  fit: BoxFit.contain,
+                                  radius: 10.0,
+                                ),
                               ),
-                              child: CachedImage(
-                                imageUrl: widget.images[index].image,
-                                fit: BoxFit.contain,
-                                radius: 10.0,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
+                            );
+                          },
+                        ),
+                      )
+                    }
                   ],
                 ),
               )
