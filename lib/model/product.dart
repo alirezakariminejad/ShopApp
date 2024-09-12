@@ -3,7 +3,7 @@ import 'package:flutter_shop_application/constants/constants.dart';
 class Product {
   String? id;
   String? name;
-  String? category;
+  String? categoryId;
   String? collectionId;
   String? thumbnail;
   String? description;
@@ -17,7 +17,7 @@ class Product {
   Product(
     this.id,
     this.name,
-    this.category,
+    this.categoryId,
     this.collectionId,
     this.thumbnail,
     this.description,
@@ -34,7 +34,7 @@ class Product {
     return Product(
       jsonObject["id"],
       jsonObject["name"],
-      jsonObject["category"],
+      jsonObject["categoryId"],
       jsonObject["collectionId"],
       '${baseUrl}files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}',
       jsonObject["description"],
