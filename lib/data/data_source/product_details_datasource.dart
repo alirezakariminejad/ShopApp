@@ -74,14 +74,19 @@ class ProductDetailsRemoteDatasource extends IProductDetailsDataSource {
 
     List<ProductVariant> productVariantList = [];
 
-    for (var variantType in variantTypeList) {
-      var variantListArranged =
-          variantList.where((element) => element.typeId == variantType.id).toList();
+    try {
+      for (var variantType in variantTypeList) {
+        var variantListArranged =
+            variantList.where((element) => element.typeId == variantType.id).toList();
 
-      productVariantList.add(ProductVariant(variantType, variantListArranged));
+        productVariantList.add(ProductVariant(variantType, variantListArranged));
+      }
+      return productVariantList;
+    } on DioError catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'unknown error');
     }
-    return productVariantList;
-    
   }
 
   @override
