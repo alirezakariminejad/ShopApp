@@ -20,7 +20,7 @@ class ProductItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => BlocProvider(
               create: (context) => ProductBloc(),
-              child: ProductDetailsScreen(),
+              child: ProductDetailsScreen(product),
             ),
           ),
         );
