@@ -28,7 +28,8 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context).add(ProductInitalizeEvent(widget.product.id!));
+    BlocProvider.of<ProductBloc>(context)
+        .add(ProductInitalizeEvent(widget.product.id!, widget.product.categoryId!));
     super.initState();
   }
 
